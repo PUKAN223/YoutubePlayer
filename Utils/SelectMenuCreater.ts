@@ -3,7 +3,7 @@ import { APIActionRowComponent, APIMessageActionRowComponent, ActionRow, ActionR
 
 export class SelectMenuCreater {
     private ActionRow: ActionRowBuilder
-    constructor(menus: SelectMenuBuilder[]) {
+    constructor(menus: SelectMenuBuilder) {
         let actionrows = new ActionRowBuilder()
         actionrows.setComponents(menus)
         this.ActionRow = actionrows

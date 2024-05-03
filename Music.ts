@@ -1,5 +1,5 @@
 import { log } from "console"
-import { Activity, Client, TextChannel, VoiceBasedChannel } from "discord.js"
+import { Activity, Client, Guild, TextChannel, VoiceBasedChannel } from "discord.js"
 import dotenv from "dotenv"
 import "colors"
 import { getToken, registerSlashCommands } from "./Utils/Utilities"
@@ -31,10 +31,23 @@ client.once("ready", (client) => {
     getVoiceConnections("default").forEach((value) => {
         value.disconnect()
     })
+    noSongEmbed(client)
 })
 
+export const currentSong = new Map<string, Song>()
 connection.on("playSong", (queue, song) => {
+    currentSong.set(queue.id, song)
     HasSongEmbed(client, song, queue)
+})
+connection.on("finish", (queue) => {
+    noSongEmbed(client)
+})
+connection.on("disconnect", (queue) => {
+    noSongEmbed(client)
+})
+
+connection.on("addSong", (queue, song) => {
+    HasSongEmbed(client, currentSong.get(queue.id) as Song, queue)
 })
 
 client.on("interactionCreate", (interaction) => {
